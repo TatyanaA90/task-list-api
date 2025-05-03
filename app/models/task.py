@@ -9,13 +9,13 @@ class Task(db.Model):
     completed_at: Mapped[datetime] = mapped_column(nullable=True)
 
     def to_dict(self):
-        return {
+        return { 
             "id" : self.id,
             "title": self.title,
             "description": self.description,
-            "is_complete": self.is_complete
+            "is_complete": False if not self.completed_at else self.completed_at
         } 
 
     @classmethod
     def from_dict(cls, dict_data_task):
-        return cls(title=dict_data_task["title"], description=["description"])
+        return cls(title=dict_data_task["title"], description=dict_data_task["description"])
