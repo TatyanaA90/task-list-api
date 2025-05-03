@@ -19,3 +19,11 @@ class Task(db.Model):
     @classmethod
     def from_dict(cls, dict_data_task):
         return cls(title=dict_data_task["title"], description=dict_data_task["description"])
+    
+    def update_from_dict(self, dict_data_task):
+        if "title" in  dict_data_task:
+            self.title = dict_data_task["title"]
+        if "description" in  dict_data_task:
+            self.description = dict_data_task["description"]
+        if "is_complete" in  dict_data_task:
+            self.completed_at = dict_data_task["is_complete"] 
