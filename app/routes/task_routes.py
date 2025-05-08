@@ -28,13 +28,19 @@ def get_all_task():
     if title_param:
         query = query.where(Task.completed_at.ilike(f"%{is_complete_param}%"))
 
+    sort_param = request.args.get('sort')
+    if sort_param == 'asc':
+        query = query.order_by(Task.title.asc())
+    elif sort_param == 'desc':
+        query = query.order_by(Task.title.desc())
+
     tasks = db.session.scalars(query.order_by(Task.id))
 
-    tasks_response = []
-    for task in tasks:
-        tasks_response.append(task.to_dict())
+    tasks_response = [task.to_dict() for task in tasks]
         
     return tasks_response
+
+
 
 @bp.get("/<id>")
 def get_one_task(id):
@@ -61,3 +67,6 @@ def delete_task(id):
     db.session.commit()
 
     return Response(status=204, mimetype="application/json")    
+
+
+

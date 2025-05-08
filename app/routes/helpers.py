@@ -17,10 +17,10 @@ def validate_model(cls, model_id):
     
     return model
 
-def create_new_model_dict(cls, data):
+def create_new_model_dict(cls, model_data):
 
     try:
-        new_instance = cls.from_dict(data)
+        new_instance = cls.from_dict(model_data)
 
     except KeyError as error:
         response = { "details": "Invalid data" } 
