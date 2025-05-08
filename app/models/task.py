@@ -13,7 +13,7 @@ class Task(db.Model):
             "id" : self.id,
             "title": self.title,
             "description": self.description,
-            "is_complete": False if not self.completed_at else self.completed_at
+            "is_complete": bool(self.completed_at)
         } 
 
     @classmethod
@@ -26,4 +26,10 @@ class Task(db.Model):
         if "description" in  dict_data_task:
             self.description = dict_data_task["description"]
         if "is_complete" in  dict_data_task:
-            self.completed_at = dict_data_task["is_complete"] 
+            self.completed_at = dict_data_task["is_complete"]
+
+    def completed(self):
+        self.completed_at = datetime.now()
+    
+    def incompleted(self):
+        self.completed_at = None
