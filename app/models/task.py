@@ -33,3 +33,5 @@ class Task(db.Model):
     
     def incompleted(self):
         self.completed_at = None
+
+    
