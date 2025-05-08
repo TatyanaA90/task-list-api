@@ -32,7 +32,7 @@ def create_new_model_dict(cls, model_data):
     db.session.commit()
 
     response = new_instance.to_dict()
-    return {"task":response}, 201
+    return {f"{cls.__name__}".lower(): response}, 201
 
 
 def send_slack_message(message):
