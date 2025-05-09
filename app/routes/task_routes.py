@@ -75,7 +75,7 @@ def mark_complete(id):
     db.session.commit()
 
     task_def = task.to_dict()
-    message = f"Someone just completed the task: {task_def["title"]}"
+    message = f"Someone just completed the task: {task_def['title']}"
 
     send_slack_message(message)
     
