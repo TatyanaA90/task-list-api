@@ -1,5 +1,6 @@
 from flask import Blueprint,abort, make_response, request, Response
 from app.models.goal import Goal
+from app.models.task import Task
 from app.routes.helpers import validate_model, create_new_model_dict, send_slack_message
 from ..db import db
 
@@ -57,3 +58,26 @@ def delete_goal(id):
     db.session.commit()
 
     return Response(status=204, mimetype="application/json")
+
+@bp.post("/<id>/tasks")
+def assign_tasks_to_goal(id):
+    goal = validate_model(Goal, id)
+
+    request_body = request.get_json()
+    task_ids = request_body.get("task_ids")
+
+    tasks = []
+    for task_id in task_ids:
+        task = validate_model(Task, task_id)
+        tasks.append(task)
+        # task.goal_id = id
+    goal.tasks = tasks
+    db.session.commit()
+
+    return {"id": goal.id, "task_ids": task_ids}
+
+@bp.get("/<id>/tasks")
+def get_tasks_by_goal(id):
+    goal = validate_model(Goal, id)
+
+    return goal.to_dict_with_tasks()

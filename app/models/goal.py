@@ -1,15 +1,27 @@
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import ForeignKey
+from typing import Optional
 from ..db import db
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from .task import Task
 
 class Goal(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     title: Mapped[str]
+    tasks: Mapped[list["Task"]] = relationship(back_populates="goal") # parent Goal
 
     def to_dict(self):
         return { 
             "id" : self.id,
             "title": self.title
         } 
+
+    def to_dict_with_tasks(self):
+        goal_dict = self.to_dict()
+        goal_dict["tasks"] = [task.to_dict() for task in self.tasks]
+        return goal_dict
 
     @classmethod
     def from_dict(cls, dict_data_task):
